@@ -123,27 +123,12 @@
 
 // The Kia
 var move = function(gameData, helpers) {
+  'use strict';
   var myHero = gameData.activeHero;
-
-  //Get stats on the nearest health well
-  var healthWellStats = helpers.findNearestObjectDirectionAndDistance(gameData.board, myHero, function(boardTile) {
-    if (boardTile.type === 'HealthWell') {
-      return true;
-    }
-  });
-  var distanceToHealthWell = healthWellStats.distance;
-  var directionToHealthWell = healthWellStats.direction;
-  
-
-  if (myHero.health < 40) {
-    //Heal no matter what if low health
-    return directionToHealthWell;
-  } else if (myHero.health < 100 && distanceToHealthWell === 1) {
-    //Heal if you aren't full health and are close to a health well already
-    return directionToHealthWell;
+  if (myHero.health < 50) {
+    return helpers.findNearestHealthWell(gameData);
   } else {
-    //If healthy, go capture a diamond mine!
-    return helpers.findNearestNonTeamDiamondMine(gameData);
+    return helpers.findNearestWeakerEnemy(gameData);
   }
 };
 
